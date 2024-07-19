@@ -25,6 +25,7 @@ require(leaps)
 fish <- read.csv(file = "Fish.csv")
 ```
 
+
 ```{r eval=TRUE}
  
 fish <- fish %>%
@@ -47,6 +48,7 @@ Whitefish <- select(Whitefish, -Species)
 ```
 
 # For each of the three species of fish listed below, determine the best regression model and also the best 2 element regression model. Use the BestSubset Regression helper file.
+
 
 
 ## Perch
@@ -82,6 +84,34 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 
 ## Pike
 
+```{r}
+fullup <- lm(Weight~ .,data=Pike)
+summary.lm(fullup)
+```
+
+### Best Models
+
+The charts best model is the L1-L2-L3, height and weight measurements. This has an estimated p-value of 8.679e-10.
+
+### Best Two regressor model
+
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Pike,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="topleft",main="Adjusted R^2")
+```
+
+The best two element model on the given chart is L1-L3, with and adjusted R squared number of 0.0965
 ### Best Models
 
 ### Best Two regressor model
